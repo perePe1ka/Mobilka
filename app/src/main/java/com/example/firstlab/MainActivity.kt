@@ -3,51 +3,26 @@ package com.example.firstlab
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import com.example.firstlab.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity(), SignInFragment.OnSignInFragmentListener {
+class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment
+        navController = navHostFragment.navController
+
         if (savedInstanceState == null) {
-            navigateToOnboard()
+            navController.navigate(R.id.onboardFragment)
         }
     }
 
-    private fun navigateToOnboard() {
-        replaceFragment(OnboardFragment())
-    }
-
-    override fun onSignInSuccess(email: String) {
-        navigateToHome(email)
-    }
-
-    fun navigateToSignIn() {
-        replaceFragment(SignInFragment())
-    }
-
-    fun navigateToRegistration() {
-        replaceFragment(RegistrationFragment())
-    }
-
-    private fun navigateToHome(email: String) {
-        val fragment = HomeFragment()
-        val bundle = Bundle()
-        bundle.putString("EMAIL", email)
-        fragment.arguments = bundle
-        replaceFragment(fragment)
-    }
-
-    private fun replaceFragment(fragment: Fragment) {
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.fragment_container, fragment)
-            .addToBackStack(null)
-            .commit()
-    }
 }
+

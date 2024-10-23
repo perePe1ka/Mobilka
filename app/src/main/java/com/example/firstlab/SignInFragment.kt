@@ -6,25 +6,15 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import com.example.firstlab.databinding.FragmentSignInBinding
 
 class SignInFragment : Fragment() {
 
     private lateinit var binding: FragmentSignInBinding
-    private lateinit var listener: OnSignInFragmentListener
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is OnSignInFragmentListener) {
-            listener = context
-        } else {
-            throw RuntimeException("$context must implement OnSignInFragmentListener")
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,23 +42,24 @@ class SignInFragment : Fragment() {
             }
 
             if (email == "1@mail.ru" && password == "1") {
-                listener.onSignInSuccess(email)
-            } else {
+                val user = User(email = email, name = "John Doe")
+
+                val action = SignInFragmentDirections.actionSignInFragmentToHomeFragment(user)
+                findNavController().navigate(action)
+            }
+            else {
                 Toast.makeText(context, "Invalid credentials", Toast.LENGTH_SHORT).show()
             }
         }
 
         binding.signUpButton.setOnClickListener {
-            (activity as MainActivity).navigateToRegistration()
+            findNavController().navigate(R.id.action_signInFragment_to_registrationFragment)
         }
     }
 
     private fun isEmailValid(email: String): Boolean {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
-
-    interface OnSignInFragmentListener {
-        fun onSignInSuccess(email: String)
-    }
 }
+
 

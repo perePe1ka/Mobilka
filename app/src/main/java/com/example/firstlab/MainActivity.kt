@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+//Ktor — это библиотека для выполнения HTTP-запросов в Kotlin.
         client = HttpClient(CIO)
         charactersRepository = CharactersRepository()
 
@@ -35,6 +35,6 @@ class MainActivity : AppCompatActivity() {
         super.onDestroy()
         client.close()
     }
-
+//Если HttpClient не закрыть, ресурсы не будут освобождены, что может привести к утечкам памяти.
 }
 

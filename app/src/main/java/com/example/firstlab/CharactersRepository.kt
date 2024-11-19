@@ -12,17 +12,34 @@ class CharactersRepository {
     private val client = HttpClient {
         install(ContentNegotiation) {
             json(Json {
-                ignoreUnknownKeys = true // Игнорируем неизвестные ключи в JSON
+                ignoreUnknownKeys = true
             })
         }
     }
 
-    suspend fun fetchCharacters(): List<Character> {
-        return client.get("https://anapioficeandfire.com/api/characters?page=1&pageSize=50")
-            .body()
+    suspend fun fetchCharactersInRange(): List<Character> {
+        val pageSize = 50
+        val startPage = 20
+        val endPage = 20
+
+        val characters = mutableListOf<Character>()
+
+        for (page in startPage..endPage) {
+            val currentPageCharacters: List<Character> = client.get("https://anapioficeandfire.com/api/characters") {
+                url {
+                    parameters.append("page", page.toString())
+                    parameters.append("pageSize", pageSize.toString())
+                }
+            }.body()
+            characters.addAll(currentPageCharacters)
+        }
+        return characters
     }
 }
 
+//Выполняет HTTP-запросы с использованием Ktor-клиента.
+//Отправляет запрос к API, получает ответ в формате JSON и преобразует его в список объектов класса Character.
+//Тут используется плагин ContentNegotiation для автоматической десериализации JSON в объекты Kotlin.
 
 
 

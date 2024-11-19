@@ -13,3 +13,7 @@ data class Character(
     val aliases: List<String> = emptyList(),
     @SerialName("playedBy") val playedBy: List<String> = emptyList()
 )
+
+
+//модель данных, которая представляет информацию о персонаже, такую как имя, культура, дата рождения, титулы.
+// Аннотация @Serializable позволяет библиотеке Kotlinx Serialization преобразовывать данные из JSON-ответа API в объект этого класса.

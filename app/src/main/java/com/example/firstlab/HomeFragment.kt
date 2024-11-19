@@ -30,7 +30,7 @@ class HomeFragment : Fragment() {
 
         lifecycleScope.launch {
             try {
-                val characters = repository.fetchCharacters()
+                val characters = repository.fetchCharactersInRange()
                 val adapter = CharacterAdapter(characters)
                 binding.recyclerView.adapter = adapter
             } catch (e: Exception) {
